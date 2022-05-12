@@ -15,14 +15,14 @@ const usuariosGet = (req, res = response) => {
 };
 
 const usuariosPost = async (req = request, res = response) => {
-  //Revisar errores en la validacion de express-validator
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json(errors);
-  }
-
   const { nombre, email, password, role } = req.body;
-  const usuario = new Usuario({ nombre, email, password, role });
+  const usuario = new Usuario({
+    nombre,
+    email,
+    password,
+    role,
+    fecha_alta: new Date().toLocaleString(),
+  });
 
   //verificar si existe el correo
   const existeEmail = await Usuario.findOne({ email });
@@ -41,8 +41,7 @@ const usuariosPost = async (req = request, res = response) => {
   await usuario.save();
 
   res.status(201).json({
-    ok: true,
-    message: "post API -> Controller",
+    message: "Usuario creado exitosamente!",
     usuario,
   });
 };
