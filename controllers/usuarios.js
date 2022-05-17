@@ -37,12 +37,21 @@ const usuariosPost = async (req = request, res = response) => {
   });
 };
 
-const usuariosPut = (req, res = response) => {
+const usuariosPut = async (req, res = response) => {
   const id = req.params.id;
-  res.status(400).json({
-    ok: true,
-    message: "put API -> Controller",
-    id,
+  const { _id, password, google, email, ...data } = req.body;
+
+  //validar BD
+  if (password) {
+    const salt = bcrypt.genSaltSync();
+    data.password = bcrypt.hashSync(password, salt);
+  }
+
+  const usuario = await Usuario.findByIdAndUpdate(id, data, { new: true });
+
+  res.status(200).json({
+    msg: "Actualizado con éxito",
+    usuario,
   });
 };
 
