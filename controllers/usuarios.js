@@ -62,14 +62,17 @@ const usuariosPut = async (req, res = response) => {
 
 const usuariosDelete = async (req, res = response) => {
   const id = req.params.id;
-
+  const usuarioAuth = req.usuarioAuth;
   const usuario = await Usuario.findByIdAndUpdate(
     id,
     { estado: false },
     { new: true }
   );
 
-  res.json(usuario);
+  res.status(200).json({
+    usuario,
+    usuarioAuth,
+  });
 };
 
 module.exports = {
