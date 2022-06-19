@@ -13,10 +13,36 @@ const usuariosGet = async (req, res = response) => {
   ]);
 
   res.json({
-    count,
+    total: count,
     usuarios,
   });
 };
+
+const usuarioPorId = async (req = request, res) => {
+  const { id } = req.params;
+
+  const usuario = await Usuario.findById(id);
+
+  if (!usuario) {
+    return res.status(400).json({
+      msg: `El usuario con id: ${id} no existe en la Base de Datos`,
+    });
+  }
+
+  res.send({
+    usuario,
+  });
+};
+
+/* const usuarioPorNombre = async (req = request, res = response) => {
+  const query = req.query.nombre;
+
+  const usuario = await Usuario.find({ nombre: query });
+
+  res.send({
+    usuario,
+  });
+}; */
 
 const usuariosPost = async (req = request, res = response) => {
   const { nombre, email, password, role } = req.body;
@@ -76,6 +102,8 @@ const usuariosDelete = async (req, res = response) => {
 
 module.exports = {
   usuariosGet,
+  usuarioPorId,
+  //usuarioPorNombre,
   usuariosPost,
   usuariosPut,
   usuariosDelete,

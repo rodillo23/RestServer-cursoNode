@@ -6,6 +6,8 @@ const {
   usuariosPost,
   usuariosPut,
   usuariosDelete,
+  usuarioPorId,
+  usuarioPorNombre,
 } = require("../controllers/usuarios");
 
 const {
@@ -20,6 +22,14 @@ const { esAdminRole, tieneRole } = require("../middlewares/validar-roles");
 const router = Router();
 
 router.get("/", usuariosGet);
+
+router.get(
+  "/:id",
+  [check("id", "No es un id válido").isMongoId(), validarCampos],
+  usuarioPorId
+);
+
+//router.get("/:coleccion/:termino", usuarioPorNombre);
 
 router.post(
   "/",
