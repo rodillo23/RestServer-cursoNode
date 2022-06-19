@@ -21,7 +21,6 @@ const esAdminRole = (req = request, res = response, next) => {
 const tieneRole = (...roles) => {
   return (req = request, res = response, next) => {
     const usuario = req.usuarioAuth.role;
-    console.log(usuario);
     if (!req.usuarioAuth) {
       return res.status(500).json({
         msg: "No se ha validado token..",
