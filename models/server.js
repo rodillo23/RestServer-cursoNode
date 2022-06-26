@@ -1,8 +1,9 @@
 const express = require("express");
 const cors = require("cors");
 
-const user = require("../routes/usuarios");
+const users = require("../routes/usuarios");
 const auth = require("../routes/auth");
+const categories = require("../routes/categorias");
 
 const { dbConnection } = require("../database/config");
 
@@ -31,7 +32,8 @@ class Server {
 
   routes() {
     this.app.use("/api/auth", auth);
-    this.app.use("/api/usuarios", user);
+    this.app.use("/api/usuarios", users);
+    this.app.use("/api/categorias", categories);
   }
 
   listen() {
