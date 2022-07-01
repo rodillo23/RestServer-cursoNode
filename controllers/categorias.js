@@ -56,14 +56,46 @@ const crearCategoria = async (req = request, res = response) => {
 };
 
 //actualizar categoria
-const actualizarCategoria = (req, res) => {
+const actualizarCategoria = async (req, res = response) => {
   const { id } = req.params;
+
+  const nombre = req.body.nombre.toUpperCase();
+  const categoria = await Categoria.findOne({ nombre });
+
+  if (categoria) {
+    return res.status(400).json({
+      msg: `La categoria ${categoria.nombre} ya se encuentra registrada en la Base de Datos`,
+    });
+  }
+
+  const categoriaActualizada = await Categoria.findByIdAndUpdate(
+    id,
+    { nombre },
+    { new: true }
+  ).populate("usuario", "nombre");
+
+  res.status(200).json({
+    msg: "Categoria actualizada con éxito",
+    data: categoriaActualizada,
+  });
 };
 
 //Borrar categoria - estado:false
+const eliminarCategoria = async (req = request, res = response) => {
+  const { id } = req.params;
+
+  const deletedCat = await Categoria.findByIdAndUpdate(id, { estado: false });
+
+  res.status(200).json({
+    msg: `La categoria ${deletedCat.nombre} se ha eliminado con éxito`,
+    data: deletedCat,
+  });
+};
 
 module.exports = {
   obtenerCategorias,
   obtenerCategoriaPorId,
   crearCategoria,
+  actualizarCategoria,
+  eliminarCategoria,
 };

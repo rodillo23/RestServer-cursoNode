@@ -4,11 +4,14 @@ const {
   crearCategoria,
   obtenerCategorias,
   obtenerCategoriaPorId,
+  actualizarCategoria,
+  eliminarCategoria,
 } = require("../controllers/categorias");
 const { existeCategoriaPorId } = require("../helpers/db-validators");
 
 const { validarCampos } = require("../middlewares/validar-campos");
 const validarJWT = require("../middlewares/validar-JWT");
+const { esAdminRole } = require("../middlewares/validar-roles");
 
 const router = Router();
 
@@ -38,13 +41,29 @@ router.post(
 );
 
 //Actualizar categoria - privado - cualquier role con token
-router.put("/:id", (req, res) => {
-  res.send("put");
-});
+router.put(
+  "/:id",
+  [
+    validarJWT,
+    check("id", "No es un Id válido").isMongoId(),
+    check("id").custom(existeCategoriaPorId),
+    check("nombre", "El nombre es obligatorio").not().isEmpty(),
+    validarCampos,
+  ],
+  actualizarCategoria
+);
 
 //Borrar una categoria - Admin
-router.delete("/:id", (req, res) => {
-  res.send("delete");
-});
+router.delete(
+  "/:id",
+  [
+    validarJWT,
+    esAdminRole,
+    check("id", "No es un Id válido").isMongoId(),
+    check("id").custom(existeCategoriaPorId),
+    validarCampos,
+  ],
+  eliminarCategoria
+);
 
 module.exports = router;
