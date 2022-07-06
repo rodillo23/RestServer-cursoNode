@@ -4,6 +4,7 @@ const cors = require("cors");
 const users = require("../routes/usuarios");
 const auth = require("../routes/auth");
 const categories = require("../routes/categorias");
+const productos = require("../routes/productos");
 
 const { dbConnection } = require("../database/config");
 
@@ -34,6 +35,7 @@ class Server {
     this.app.use("/api/auth", auth);
     this.app.use("/api/usuarios", users);
     this.app.use("/api/categorias", categories);
+    this.app.use("/api/productos", productos);
   }
 
   listen() {
