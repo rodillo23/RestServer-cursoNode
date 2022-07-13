@@ -1,4 +1,5 @@
 const Categoria = require("../models/categoria");
+const Producto = require("../models/producto");
 const Role = require("../models/role");
 const Usuario = require("../models/usuario");
 
@@ -34,9 +35,20 @@ const existeCategoriaPorId = async (id) => {
   }
 };
 
+//PRODUCTO
+const existeProducto = async (nombre) => {
+  const producto = await Producto.findOne({ nombre });
+  if (producto) {
+    throw new Error(
+      `El producto ${nombre} ya se encuentra registrado en la Base de Datos`
+    );
+  }
+};
+
 module.exports = {
   esRoleValido,
   emailExiste,
   existeUsuarioPorId,
   existeCategoriaPorId,
+  existeProducto,
 };
