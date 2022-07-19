@@ -10,13 +10,24 @@ const {
 const {
   existeCategoriaPorId,
   existeProducto,
+  existeProductoPorId,
 } = require("../helpers/db-validators");
 const { validarCampos } = require("../middlewares/validar-campos");
 const validarJWT = require("../middlewares/validar-JWT");
 const router = Router();
 
 router.get("/", obtenerProductos);
-router.get("/:id", obtenerProducto);
+
+router.get(
+  "/:id",
+  [
+    check("id", "El Id no es válido").isMongoId(),
+    validarCampos,
+    check("id").custom(existeProductoPorId),
+    validarCampos,
+  ],
+  obtenerProducto
+);
 router.post(
   "/",
   [

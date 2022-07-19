@@ -19,8 +19,14 @@ const obtenerProductos = async (req, res) => {
   });
 };
 
-const obtenerProducto = (req, res) => {
-  res.send("Obtener Producto");
+const obtenerProducto = async (req, res) => {
+  const { id } = req.params;
+
+  const producto = await Producto.findById(id).populate("categoria", "nombre");
+
+  res.status(200).json({
+    producto,
+  });
 };
 
 const crearProducto = async (req, res) => {

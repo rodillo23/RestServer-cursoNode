@@ -45,10 +45,18 @@ const existeProducto = async (nombre) => {
   }
 };
 
+const existeProductoPorId = async (id) => {
+  const producto = await Producto.findById(id);
+  if (!producto) {
+    throw new Error(`El Producto no existe en la Base de Datos`);
+  }
+};
+
 module.exports = {
   esRoleValido,
   emailExiste,
   existeUsuarioPorId,
   existeCategoriaPorId,
   existeProducto,
+  existeProductoPorId,
 };
