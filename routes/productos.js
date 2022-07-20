@@ -41,7 +41,17 @@ router.post(
   ],
   crearProducto
 );
-router.put("/:id", actualizarProducto);
+router.put(
+  "/:id",
+  [
+    validarJWT,
+    check("id", "No es un Id válido").isMongoId(),
+    validarCampos,
+    check("id").custom(existeProductoPorId),
+    validarCampos,
+  ],
+  actualizarProducto
+);
 router.delete("/:id", eliminarProducto);
 
 module.exports = router;

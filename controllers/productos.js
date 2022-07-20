@@ -47,8 +47,21 @@ const crearProducto = async (req, res) => {
   });
 };
 
-const actualizarProducto = (req, res) => {
-  res.send("Actualizar Producto");
+const actualizarProducto = async (req, res) => {
+  const { id } = req.params;
+
+  const { nombre, categoria, descripcion, precio } = req.body;
+
+  const newProduct = await Producto.findByIdAndUpdate(
+    id,
+    { nombre, categoria, descripcion, precio, usuario: req.usuarioAuth._id },
+    { new: true }
+  ).populate("categoria", "nombre");
+
+  res.status(200).json({
+    msg: "Producto actualizado exitosamente!",
+    newProduct,
+  });
 };
 
 const eliminarProducto = (req, res) => {
