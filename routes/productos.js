@@ -14,6 +14,7 @@ const {
 } = require("../helpers/db-validators");
 const { validarCampos } = require("../middlewares/validar-campos");
 const validarJWT = require("../middlewares/validar-JWT");
+const { esAdminRole } = require("../middlewares/validar-roles");
 const router = Router();
 
 router.get("/", obtenerProductos);
@@ -52,6 +53,17 @@ router.put(
   ],
   actualizarProducto
 );
-router.delete("/:id", eliminarProducto);
+router.delete(
+  "/:id",
+  [
+    validarJWT,
+    esAdminRole,
+    check("id", "No es un Id válido").isMongoId(),
+    validarCampos,
+    check("id").custom(existeProductoPorId),
+    validarCampos,
+  ],
+  eliminarProducto
+);
 
 module.exports = router;

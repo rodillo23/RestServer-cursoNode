@@ -64,8 +64,18 @@ const actualizarProducto = async (req, res) => {
   });
 };
 
-const eliminarProducto = (req, res) => {
-  res.send("Eliminar Producto");
+const eliminarProducto = async (req, res) => {
+  const { id } = req.params;
+  const productoEliminado = await Producto.findByIdAndUpdate(
+    id,
+    { estado: false },
+    { new: true }
+  );
+
+  res.status(200).json({
+    msg: "Producto eliminado con éxito",
+    productoEliminado,
+  });
 };
 
 module.exports = {
